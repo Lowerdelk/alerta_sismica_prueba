@@ -8,6 +8,7 @@ st.set_page_config(page_title="Alertas Sismicas",
 
 
 
+# CSS style for the header
 header_style = """
     <style>
         .header {
@@ -25,11 +26,25 @@ header_style = """
         .header .image {
             width: 40px;
             height: 40px;
-            margin-right: 10px;
         }
 
         .header span {
             font-size: 48px;
+        }
+        
+        @media (max-width: 728px) {
+            .header {
+                flex-wrap: wrap;
+                padding: 5px;
+            }
+
+            .header span {
+                font-size: 20px
+            }
+
+            .header .image {
+                margin-bottom: 5px;
+            }
         }
     </style>
 """
@@ -54,6 +69,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# CSS style for the split Markdown sections
 split_markdown_style = """
     <style>
         .split-markdown {
@@ -61,20 +77,24 @@ split_markdown_style = """
             justify-content: center;
         }
         .left-section {
-            width: 400px;
+            flex: 1 1 50%;
+            max-width: 400px;
             background-color: teal;
             padding: 20px;
             text-align: center;
             border-radius: 15px;
             margin-right: 20px;
+            margin-bottom: 20px;
         }
         .right-section {
-            width: 400px;
+            flex: 1 1 50%;
+            max-width: 400px;
             background-color: orange;
             padding: 20px;
             text-align: center;
             border-radius: 15px;
             margin-left: 20px;
+            margin-bottom: 20px;
         }
         .split-markdown h2 {
             font-size: 80px;
@@ -84,7 +104,21 @@ split_markdown_style = """
             font-size: 44px;
             color: black;
         }
-        
+        @media (max-width: 728px) {
+            .left-section, .right-section {
+                width: 100%;
+                max-width: none;
+                margin-right: 0;
+                margin-left: 0;
+            }
+            .split-markdown h2 {
+                font-size: 34px;
+            }
+            .split-markdown p {
+                font-size: 20px;
+                color: black;
+            }
+        }
     </style>
 """
 
