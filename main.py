@@ -3,7 +3,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 
-# Aqui va la ruta de acceso del archivo .json
+# Aqui va la ruta de acceso del archivo .jsongit co
 credentials_file = "soy-henry.json"
 
 # Define the scope and authorize the credentials
