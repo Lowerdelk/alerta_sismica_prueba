@@ -1,39 +1,21 @@
 import streamlit as st
-from google.oauth2 import service_account
-from gsheetsdb import connect
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import datetime
 
 
-st.set_page_config(page_title="Alertas Sismicas",
-                   page_icon="bar_chart:",
-                   layout="wide")
+credentials_file = "soy-henry.json"
 
+# Define the scope and authorize the credentials
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_file, scope)
+client = gspread.authorize(credentials)
 
+# Open the Google Sheet by its title or URL
+sheet = client.open("Feedback usuario (respuestas)")
 
-
-# Create a connection object.
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=[
-        "https://www.googleapis.com/auth/spreadsheets",
-    ],
-)
-conn = connect(credentials=credentials)
-
-
-# Perform SQL query on the Google Sheet.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
-def run_query(query):
-    rows = conn.execute(query, headers=1)
-    rows = rows.fetchall()
-    return rows
-
-sheet_url = st.secrets["private_gsheets_url"]
-rows = run_query(f'SELECT * FROM "{sheet_url}"')
-
-# Print results.
-for row in rows:
-    st.write(f"{row.name} has a :{row.pet}:")
+# Access the specific worksheet within the sheet
+worksheet = sheet.get_worksheet(0)
 
 
 st.title("Formulario de Registro")
@@ -44,16 +26,21 @@ if choice == "Home":
     st.subheader("Formulario")
 
     with st.form(key='formulario'):
-        nombre = st.text_input("Nombre y Apellido")
-        correo = st.text_input("Correo Electronico")
-        celular = st.text_input("Numero de Telefono Celular")
-        pais = st.selectbox('Ingrese su pais', options=['Argentina', 'Colombia', 'Peru', 'Venezuela'])
+        fecha = datetime.datetime.now()
+        formatted_datetime = fecha.strftime("%d/%m/%y %H:%M:%S")
+        input1 = st.selectbox('Sentiste el ultimo sismo?', options=['Sí', 'No'])
+        input2 = st.selectbox("Califica nuestros servicios (bajo 1 y alto 5)", options=['1', '2', '3', '4', '5'])
+        input3 = st.selectbox('Compartirias nuestra aplicacion?', options=['Sí', 'No'])
+        input4 = st.text_area('Algún comentario de mejora?')
 
+        row = [formatted_datetime, input1, input2, input3, input4]
         boton = st.form_submit_button(label='Subir')
-
+        st.write(fecha)
 
     if boton:
-        st.success(f"Hola {nombre}, has subido tu informacion con exito")
+        st.success("Has subido tu informacion con exito")
+        worksheet.append_row(row)
+
 
 
 
