@@ -16,7 +16,7 @@ sheet = client.open("Feedback usuario (respuestas)")
 worksheet = sheet.get_worksheet(0)
 
 
-st.title("Formulario de Registro")
+st.title("Formulario de Sismo")
 menu = ['Home', 'About']
 choice = st.sidebar.selectbox("Menu", menu)
 
@@ -33,7 +33,6 @@ if choice == "Home":
 
         row = [formatted_datetime, input1, input2, input3, input4]
         boton = st.form_submit_button(label='Subir')
-        st.write(fecha)
 
     if boton:
         st.success("Has subido tu informacion con exito")
