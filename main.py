@@ -3,13 +3,11 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import datetime
 
-# Aqui va la ruta de acceso del archivo .jsongit co
-credentials_file = "soy-henry.json"
+# Load the credentials from secrets.toml
+creds = st.secrets["gcp"]
 
-# Define the scope and authorize the credentials
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials = ServiceAccountCredentials.from_json_keyfile_name(credentials_file, scope)
-client = gspread.authorize(credentials)
+# Authorize the client with the retrieved credentials
+client = gspread.service_account_from_dict(creds)
 
 # Open the Google Sheet by its title or URL
 sheet = client.open("Feedback usuario (respuestas)")
